@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  registry1:
+    image: apascualco/eureka:1.0.0-SNAPSHOT
+    networks:
+      apascualco:
+        aliases:
+          - registry1
+    ports:
+      - "8761:8761"
+    environment:
+      - ADDITIONAL_EUREKA_SERVER_LIST=http://registry2:8761/eureka/,http://registry3:8761/eureka/
+
+  registry2:
+    image: apascualco/eureka:1.0.0-SNAPSHOT
+    networks:
+      apascualco:
+        aliases:
+          - registry2
+    ports:
+      - "8762:8761"
+    environment:
+      - ADDITIONAL_EUREKA_SERVER_LIST=http://registry1:8761/eureka/,http://registry3:8761/eureka/
+
+  registry3:
+    image: apascualco/eureka:1.0.0-SNAPSHOT
+    networks:
+      apascualco:
+        aliases:
+          - registry3
+    ports:
+      - "8763:8761"
+    environment:
+      - ADDITIONAL_EUREKA_SERVER_LIST=http://registry1:8761/eureka/,http://registry2:8761/eureka/
+
+networks:
+  apascualco:
+    external:
+      name: apascualco
